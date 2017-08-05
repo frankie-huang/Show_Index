@@ -15,9 +15,19 @@ window.onload = function() {
             document.head.appendChild(title);
             document.body.appendChild(h1);
             var ul = document.createElement('ul');
+
+            //如果父目录是www，检测是否有phpmyadmin路径，没有则添加上去
             if (text[text.length - 2].toLowerCase() == 'www') {
-                text.splice(2, 0, 'phpmyadmin');
+                if (match_array(text, 'phpmyadmin').length == 0) {
+                    text.splice(2, 0, 'phpmyadmin');
+                }
             }
+
+            //检测当前目录是否有laravel项目
+            var match_laravel = match_array(text, 'laravel', false);
+            var index = 0;
+
+            //添加显示路径名以及跳转索引
             for (var i = 1; i < text.length - 2; i++) {
                 if (text[i] == 'index' || text[i] == 'index.html') {
                     continue;
@@ -30,6 +40,10 @@ window.onload = function() {
                     a.innerHTML = text[i];
                 }
                 a.href = text[i];
+                if (i == match_laravel[index]) {
+                    a.href = 'http://www.' + text[i] + '.com';
+                    index++;
+                }
                 li.appendChild(a);
                 ul.appendChild(li);
             }
@@ -40,4 +54,27 @@ window.onload = function() {
         }
     }
     ajax(options);
+}
+
+//搜索数组中是否有匹配的字符串（忽略大小写）
+function match_array(array, string, is_all = true) {
+    var length_array = array.length;
+    var match = new Array();
+    var index = 0;
+    if (is_all == true) {
+        for (var i = 0; i < length_array; i++) {
+            var value_array = array[i].toLowerCase();
+            if (value_array == string) {
+                match[index++] = i;
+            }
+        }
+    } else {
+        for (var i = 0; i < length_array; i++) {
+            var value_array = array[i].toLowerCase();
+            if (value_array.match(string) != null) {
+                match[index++] = i;
+            }
+        }
+    }
+    return match;
 }
