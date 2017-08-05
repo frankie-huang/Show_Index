@@ -41,7 +41,7 @@ window.onload = function() {
                 }
                 a.href = text[i];
                 if (i == match_laravel[index]) {
-                    a.href = 'http://www.' + text[i] + '.com';
+                    a.href = 'http://www.' + text[i] + '.top';
                     index++;
                 }
                 li.appendChild(a);
